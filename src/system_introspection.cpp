@@ -96,6 +96,7 @@ static string git_get_srcdir_from_makefile(){
     char* result = fgets(buffer, buffer_sz, fp);
     if(result != buffer){
         cerr << "[get_srcdir_from_makefile] WARNING: Cannot read the result from make: " << strerror(errno) << endl;
+        pclose(fp);
     } else {
         // (chomp) truncate the string at the first '\n'
         strtok(result, "\n");
@@ -120,6 +121,7 @@ static string git_read_last_commit(){
     char* result = fgets(buffer, buffer_sz, fp);
     if(result != buffer){
         cerr << "[git_read_last_commit] WARNING: Cannot read the result from git: " << strerror(errno) << endl;
+        pclose(fp);
     } else {
         // (chomp) truncate the string at the first '\n'
         strtok(result, "\n");
@@ -174,8 +176,8 @@ Statm statm() {
     return s;
 }
 
-uint64_t get_memory_footprint() {
-    return statm().m_rss * /* 4 Kb */ (1<<12);
+uint64_t get_memory_footprint() { // MB
+    return statm().m_rss >> 8;
 }
 
 } // namespace common
