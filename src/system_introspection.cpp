@@ -88,7 +88,7 @@ static string git_get_srcdir_from_makefile(){
     constexpr size_t buffer_sz = 512;
     char buffer[buffer_sz];
 
-    FILE* fp = popen("make -n -p | awk '/^srcdir\\s*:?=/ {print $NF}'", "r");
+    FILE* fp = popen("make -n -p | awk '/^srcdir[[:space:]]*:?=/ {print $NF}'", "r");
     if(fp == nullptr){
         cerr << "[get_srcdir_from_makefile] WARNING: Cannot execute make: " << strerror(errno) << endl;
         return "";
